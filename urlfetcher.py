@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 from urllib.parse import urlparse
 
-def getIDs():
+def getURLs():
     userID = "combatperson7"
     appId = 0
 
@@ -28,17 +28,4 @@ def getIDs():
     with open ('idlist.txt', 'w') as fp:
         fp.writelines("%s\n" % item for item in sharedFilesList)
 
-
-    """
-    for i in range(1,30):
-        u2 = urllib.request.urlopen('https://steamcommunity.com/id/combatperson/screenshots?p=' + str(i) + '&sort=newestfirst&browsefilter=myfiles&view=grid&privacy=14')
-        soup= BeautifulSoup(u2, 'html.parser')
-        for link in soup.find_all('a'):
-            #print(link.get('href'))
-            parsed = urlparse(link.get('href'))
-            if parsed.path == '/sharedfiles/filedetails/':
-                Templist.append(parsed.query)
-                print(parsed)
-        i = i+1
-    """
-getIDs()
+getURLs()
