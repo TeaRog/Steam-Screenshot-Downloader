@@ -2,9 +2,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 from urllib.parse import urlparse
 
-def getURLs():
-    userID = "combatperson7"
-    appId = 0
+def getURLs(userId, appId):
 
     sharedFilesList = []
     newAdded = True
@@ -12,7 +10,7 @@ def getURLs():
     print("Searching for screenshots")
     while(newAdded):
         newAdded = False
-        urlString = "https://steamcommunity.com/id/" + userID + "/screenshots/?p=" + str(currPage) + "&appid=" + str(appId) + "&sort=newestfirst&browsefilter=myfiles&view=imagewall"
+        urlString = "https://steamcommunity.com/id/" + userId + "/screenshots/?p=" + str(currPage) + "&appid=" + str(appId) + "&sort=newestfirst&browsefilter=myfiles&view=imagewall"
         
         url = urllib.request.urlopen(urlString)
         soup = BeautifulSoup(url, "html.parser")
@@ -22,10 +20,10 @@ def getURLs():
                 newAdded = True
                 sharedFilesList.append(hyperlink.get("href"))
         currPage = currPage + 1
-    print(currPage)
+    return sharedFilesList
     
+
+def dumpURLs(sharedFilesList):
     print ("Dumping URLs to file")
     with open ('idlist.txt', 'w') as fp:
         fp.writelines("%s\n" % item for item in sharedFilesList)
-
-getURLs()

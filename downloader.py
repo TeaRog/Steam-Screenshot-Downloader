@@ -1,15 +1,44 @@
-import idfetcher
-from urllib.parse import urlunsplit
 from urllib.parse import urlparse
-from urllib.parse import urlunparse
+from urllib.parse import parse_qs
+import os.path
+
 import urllib.request
 from bs4 import BeautifulSoup
 
-idlist=[]
-idlist = idfetcher.getIDs()
-iterator = 0
-print('Fetched IDs!')
-print (idlist)
+
+def downloadImages(sharedFilesUrlList):
+    print("Downloading images")
+    screenshotDataDict = {}
+    for sharedFileUrl in sharedFilesUrlList:
+        #Open the sharedfiles page
+        html = urllib.request.urlopen(sharedFileUrl)
+        soup = BeautifulSoup(html, "html.parser")
+
+        #Find the image and get its source/CDN url.
+        hyperlink = soup.find(id="ActualMedia")
+        CDNUrl = urlparse(hyperlink.get("src"))._replace(query=None).geturl()
+        
+        #Open the source url and read the image data
+        screenshotURL = urllib.request.urlopen(CDNUrl)
+        screenshotData = screenshotURL.read()
+
+        #putting into a dict with the steam image id and the image data (its probably not a good idea to put the image data as a hashmap?)
+        id = int(parse_qs(urlparse(sharedFileUrl).query)["id"][0])
+        screenshotDataDict[id] = screenshotData
+
+    return screenshotDataDict
+
+def writeImages(screenshotDataDict):
+    if not (os.path.exists("imgs")):
+        os.mkdir("imgs")
+    for key, value in screenshotDataDict.items():
+        filename = str(key) + ".jpg"
+        with open(os.path.join("imgs", filename), 'wb') as imgFile:
+            imgFile.write(value)
+
+
+
+"""
 parsed = list(urlparse('https://steamcommunity.com/sharedfiles/filedetails/?id=1481162777'))
 for id in idlist:
     #print(id)
@@ -40,7 +69,7 @@ for id in idlist:
                     continue
                 else:
                     raise
-            
+"""           
     
     
     
