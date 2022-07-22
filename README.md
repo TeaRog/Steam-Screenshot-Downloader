@@ -7,6 +7,7 @@ This is a fork of https://github.com/sandarustar7/Steam-Screenshot-Downloader
 1. Set all images to public
 2. Change the variable userId in main.py to your steam account id
 3. Change the variable appId in main.py to whever game images you want to download. 0 for all games.
+4. run ```python3 main.py```
 
 ## Making All Images Public
 
@@ -17,7 +18,6 @@ In you steam client (not on the website), view all your screenshots at https://s
 3. Select All
 4. Make Public
 5. Repeat for all pages
-4. run ```python3 main.py```
 
 ## Old Documentation
 
